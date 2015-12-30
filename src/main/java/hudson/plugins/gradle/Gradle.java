@@ -221,7 +221,15 @@ public class Gradle extends Builder implements DryRun {
         
        
         Set<String> sensitiveVars = build.getSensitiveBuildVariables();
-        args.addKeyValuePairs("-D", fixParameters(build.getBuildVariables()), sensitiveVars);
+        Map<String, String> buildVars = build.getBuildVariables();
+        buildVars.remove("DEPENDENCY_CONFIG");
+        buildVars.remove("PLATFORM_CONFIG");
+        buildVars.remove("HARDWARE_CONFIG");
+        buildVars.remove("I18N_CONFIG");
+        buildVars.remove("PACKAGE_CONFIG");
+        buildVars.remove("DEBUG_CONFIG");
+        buildVars.remove("GAME_CONFIG");
+        args.addKeyValuePairs("-D", fixParameters(buildVars), sensitiveVars);
         args.addTokenized(normalizedSwitches);
         args.addTokenized(normalizedTasks);
         if (buildFile != null && buildFile.trim().length() != 0) {
